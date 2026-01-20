@@ -302,6 +302,27 @@
       "commentCount": 0,
       "views": 0,
       "id": 9
+    },
+    {
+      "title": "Learning git commit",
+      "content": "TypeScript provides powerful features for building scalable applications. Let's explore some advanced patterns that can improve your code quality.\n\nConditional types, mapped types, and generic constraints are powerful tools in your TypeScript arsenal.",
+      "authorId": 2,
+      "author": {
+        "id": 2,
+        "username": "jane_smith",
+        "displayName": "Jane Smith",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=jane_smith"
+      },
+      "tags": [
+        "TypeScript",
+        "Advanced",
+        "Patterns"
+      ],
+      "likes": 0,
+      "likedBy": [],
+      "commentCount": 0,
+      "views": 0,
+      "id": 10
     }
   ],
   "comments": [
