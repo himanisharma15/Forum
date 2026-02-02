@@ -1,0 +1,244 @@
+.post-detail-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-bottom: 24px;
+  transition: color 0.3s;
+
+  &:hover {
+    color: var(--primary-dark);
+    transform: translateX(-4px);
+  }
+}
+
+.post-detail {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+body.dark-theme .post-detail {
+  background: #2a2a2a;
+  border-color: var(--dark-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.post-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+body.dark-theme .post-detail-header {
+  border-bottom-color: var(--dark-border);
+}
+
+.author-section {
+  display: flex;
+  gap: 16px;
+}
+
+.author-avatar-large {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+
+.author-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+body.dark-theme .author-name {
+  color: var(--light-text);
+}
+
+.post-time {
+  font-size: 13px;
+  color: var(--secondary-color);
+}
+
+.view-badge {
+  font-size: 13px;
+  color: var(--secondary-color);
+  background-color: var(--light-bg);
+  padding: 6px 12px;
+  border-radius: 16px;
+}
+
+body.dark-theme .view-badge {
+  background-color: #3a3a3a;
+}
+
+.post-detail-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+}
+
+body.dark-theme .post-detail-title {
+  color: var(--light-text);
+}
+
+.post-tags-detail {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.tag-detail {
+  background-color: var(--light-bg);
+  color: var(--primary-color);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+body.dark-theme .tag-detail {
+  background-color: #3a3a3a;
+  color: #66b3ff;
+}
+
+.post-detail-content {
+  color: var(--dark-text);
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 24px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+body.dark-theme .post-detail-content {
+  color: var(--light-text);
+}
+
+.post-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+body.dark-theme .post-actions {
+  border-color: var(--dark-border);
+}
+
+.action-button {
+  background: none;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: white;
+    transform: none;
+  }
+
+  &.liked {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.comment-count {
+  color: var(--secondary-color);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.loading-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 16px;
+
+  p {
+    margin: 0;
+    color: var(--secondary-color);
+  }
+}
+
+@media (max-width: 768px) {
+  .post-detail-page {
+    padding: 0 12px;
+  }
+
+  .post-detail {
+    padding: 16px;
+  }
+
+  .post-detail-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .post-detail-title {
+    font-size: 24px;
+  }
+
+  .author-avatar-large {
+    width: 48px;
+    height: 48px;
+  }
+
+  .post-detail-content {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .post-actions {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .action-button {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+}

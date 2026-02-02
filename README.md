@@ -1,430 +1,236 @@
-# Forum App Backend - JSON Server
+# Community Forum App
 
-A JSON Server backend with authentication for a forum application. This backend supports user authentication, posts, comments, and likes functionality.
+A modern, feature-rich forum application built with **React**, **Vite**, **React Query**, **Redux Toolkit**, and **React Router**.
+
+## Features
+
+### 🚀 Core Features
+- **Feed Page**: Scrollable list of posts with infinite scroll loading
+- **Post Detail Page**: Full post view with comments section
+- **New Post Form**: Create posts with title, content, and tags
+- **Comments**: Add and view comments on posts (lazy-loaded)
+- **Like/Reply Buttons**: Like posts and comments with instant UI updates
+- **Authentication**: Login/signup with persistent session
+- **Dark/Light Theme**: Toggle theme with persistent preference
+
+### 🎯 Technical Features
+- **React Query**: Server state management with caching and synchronization
+- **Redux Toolkit**: Global state management (auth, theme)
+- **React Router**: Client-side navigation
+- **Lazy Loading**: Comments load only when needed
+- **useRef**: Auto-focus on form inputs
+- **Responsive Design**: Mobile-friendly UI
+- **Error Handling**: Comprehensive error messages
+- **Loading States**: Smooth loading indicators
+
+## Project Structure
+
+```
+forum1/
+├── src/
+│   ├── components/          # Reusable components
+│   │   ├── Navbar.jsx      # Navigation header
+│   │   ├── PostCard.jsx    # Post list item
+│   │   ├── NewPostForm.jsx # Post creation form (useRef)
+│   │   ├── CommentSection.jsx # Comment container (lazy loaded)
+│   │   └── CommentList.jsx # Comment list display
+│   ├── pages/              # Page components
+│   │   ├── FeedPage.jsx    # Posts feed with infinite scroll
+│   │   ├── PostDetailPage.jsx # Individual post view
+│   │   ├── LoginPage.jsx   # Login form
+│   │   └── SignupPage.jsx  # Registration form
+│   ├── store/              # Redux setup
+│   │   ├── index.js        # Store configuration
+│   │   └── slices/         # Redux slices
+│   │       └── authSlice.js # Auth state management
+│   ├── services/           # API calls
+│   │   └── api.js          # REST API service
+│   ├── hooks/              # Custom hooks
+│   │   └── useAuth.js      # Auth utilities
+│   ├── App.jsx             # App root component
+│   ├── App.css             # App styles
+│   ├── index.css           # Global styles
+│   └── main.jsx            # Entry point
+├── index.html              # HTML template
+├── vite.config.js          # Vite configuration
+├── db.json                 # JSON Server database
+├── api.rest                # REST API test file
+├── package.json            # Dependencies
+└── README.md               # This file
+```
 
 ## Installation
 
+### Prerequisites
+- Node.js 16+ and npm
+
+### Setup Steps
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Ensure db.json comments section exists** (already included)
+
+## Development
+
+### Start Development Servers
+
+**Option 1: Run both servers together**
 ```bash
-npm install
+npm run dev:all
 ```
 
-## Running the Server
+**Option 2: Run servers separately**
 
-### Option 1: Start with Authentication (Recommended)
-```bash
-npm run start:auth
-```
-
-This will start the server on `http://localhost:3001` with built-in authentication support.
-
-### Option 2: Start without Authentication
-```bash
-npm start
-```
-
-### Option 3: Development Mode with Auto-reload
+Terminal 1 - Frontend:
 ```bash
 npm run dev
 ```
 
+Terminal 2 - Backend:
+```bash
+npm run server:dev
+```
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
 ## API Endpoints
 
-### Authentication (json-server-auth)
+The app connects to a JSON Server backend (port 3001) with the following endpoints:
 
-#### Register
-```
-POST /auth/signup
-Content-Type: application/json
-
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
-
-#### Login
-```
-POST /auth/login
-Content-Type: application/json
-
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
-
-**Response:**
-```json
-{
-  "access_token": "your_jwt_token",
-  "user": {
-    "id": 1,
-    "email": "user@example.com"
-  }
-}
-```
-
-### Users
-
-#### Get All Users
-```
-GET /users
-```
-
-#### Get Single User
-```
-GET /users/:id
-```
-
-#### Update User
-```
-PATCH /users/:id
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "displayName": "New Name",
-  "bio": "Updated bio",
-  "theme": "dark"
-}
-```
+### Authentication
+- `POST /login` - User login
+- `POST /signup` - User registration
 
 ### Posts
-
-#### Get All Posts
-```
-GET /posts
-```
-
-#### Get Single Post with Comments
-```
-GET /posts/:id
-GET /posts/:id?_embed=comments
-```
-
-#### Create Post
-```
-POST /posts
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "title": "Post Title",
-  "content": "Post content here",
-  "authorId": 1,
-  "tags": ["tag1", "tag2"]
-}
-```
-
-#### Update Post
-```
-PATCH /posts/:id
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "title": "Updated Title",
-  "content": "Updated content"
-}
-```
-
-#### Delete Post
-```
-DELETE /posts/:id
-Authorization: Bearer {token}
-```
-
-#### Get Posts by Author
-```
-GET /posts?authorId=1
-```
-
-#### Get Posts by Tag
-```
-GET /posts?tags_like=React
-```
+- `GET /posts` - Get all posts (paginated)
+- `GET /posts/:id` - Get single post
+- `POST /posts` - Create new post
+- `PATCH /posts/:id` - Update post
+- `DELETE /posts/:id` - Delete post
 
 ### Comments
-
-#### Get All Comments
-```
-GET /comments
-```
-
-#### Get Comments for a Post
-```
-GET /comments?postId=1
-```
-
-#### Get Comment with Replies
-```
-GET /comments/:id?_embed=replies
-```
-
-#### Get Comment Replies (Nested Comments)
-```
-GET /comments?parentCommentId=1
-```
-
-#### Create Comment
-```
-POST /comments
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "postId": 1,
-  "parentCommentId": null,
-  "authorId": 1,
-  "content": "Comment text here"
-}
-```
-
-#### Create Reply to Comment
-```
-POST /comments
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "postId": 1,
-  "parentCommentId": 5,
-  "authorId": 1,
-  "content": "Reply text here"
-}
-```
-
-#### Update Comment
-```
-PATCH /comments/:id
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "content": "Updated comment text"
-}
-```
-
-#### Delete Comment
-```
-DELETE /comments/:id
-Authorization: Bearer {token}
-```
-
-### Likes
-
-#### Get All Likes
-```
-GET /likes
-```
-
-#### Get User's Likes
-```
-GET /likes?userId=1
-```
-
-#### Get Post Likes
-```
-GET /likes?postId=1&type=post
-```
-
-#### Get Comment Likes
-```
-GET /likes?commentId=1&type=comment
-```
-
-#### Add Like
-```
-POST /likes
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "userId": 1,
-  "postId": 1,
-  "type": "post"
-}
-```
-
-#### Remove Like
-```
-DELETE /likes/:id
-Authorization: Bearer {token}
-```
-
-## Database Schema
+- `GET /comments?postId=:id` - Get comments for a post
+- `POST /comments` - Create comment
+- `PATCH /comments/:id` - Update comment
+- `DELETE /comments/:id` - Delete comment
 
 ### Users
-```json
-{
-  "id": 1,
-  "email": "john@example.com",
-  "password": "hashed_password",
-  "username": "john_doe",
-  "avatar": "url_to_avatar",
-  "displayName": "John Doe",
-  "bio": "User bio",
-  "createdAt": "2026-01-18T08:30:00Z",
-  "theme": "light"
-}
+- `GET /users` - Get all users
+- `GET /users/:id` - Get user profile
+- `PATCH /users/:id` - Update user profile
+
+## Demo Credentials
+
+Use these credentials to test the app:
+
+```
+Email: jane@example.com
+Password: password123
 ```
 
-### Posts
-```json
-{
-  "id": 1,
-  "title": "Post Title",
-  "content": "Post content",
-  "authorId": 1,
-  "author": {
-    "id": 1,
-    "username": "john_doe",
-    "displayName": "John Doe",
-    "avatar": "url"
-  },
-  "createdAt": "2026-01-18T08:30:00Z",
-  "updatedAt": "2026-01-18T08:30:00Z",
-  "likes": 24,
-  "likedBy": [2, 3, 4, 5],
-  "commentCount": 5,
-  "tags": ["React", "Query"],
-  "views": 156
-}
-```
+Or create a new account via the signup page.
 
-### Comments
-```json
-{
-  "id": 1,
-  "postId": 1,
-  "parentCommentId": null,
-  "authorId": 2,
-  "author": {
-    "id": 2,
-    "username": "jane_smith",
-    "displayName": "Jane Smith",
-    "avatar": "url"
-  },
-  "content": "Comment text",
-  "createdAt": "2026-01-18T09:15:00Z",
-  "updatedAt": "2026-01-18T09:15:00Z",
-  "likes": 8,
-  "likedBy": [1, 3],
-  "replies": 1
-}
-```
+## Key Technologies
 
-### Likes
-```json
-{
-  "id": 1,
-  "userId": 2,
-  "postId": 1,
-  "type": "post"
-}
-```
+| Technology | Purpose |
+|------------|---------|
+| **React 18** | UI library |
+| **Vite** | Fast build tool and dev server |
+| **React Router v6** | Client-side routing |
+| **React Query v5** | Server state management, caching |
+| **Redux Toolkit** | Global state (auth, theme) |
+| **JSON Server Auth** | Mock backend with authentication |
 
-## Test Credentials
+## Component Details
 
-### Pre-seeded Users:
-- Email: `john@example.com` | Username: `john_doe`
-- Email: `jane@example.com` | Username: `jane_smith`
-- Email: `alex@example.com` | Username: `alex_developer`
-- Email: `sarah@example.com` | Username: `sarah_tech`
-- Email: `mike@example.com` | Username: `mike_coder`
+### NewPostForm.jsx
+- Uses `useRef` to auto-focus title input
+- Form toggles between hidden/visible states
+- Character counters for title (200) and content (5000)
+- Optimistic updates via React Query
 
-All passwords are hashed with bcrypt. You can register new users via the `/auth/signup` endpoint.
+### CommentSection.jsx
+- **Lazy Loading**: Comments only load when section expands
+- Uses `Suspense` with `lazy()` for CommentList component
+- Comments hidden by default to improve initial load time
 
-## Query Examples
+### PostCard.jsx
+- Instant like updates with optimistic UI
+- Time-ago formatting
+- Shows tags and view count
+- Responsive grid layout
 
-### Pagination
-```
-GET /posts?_page=1&_limit=10
-```
+### Authentication
+- Persistent sessions via localStorage
+- Redux store syncs with localStorage on app start
+- Automatic redirect for unauthenticated users
 
-### Sorting
-```
-GET /posts?_sort=createdAt&_order=desc
-```
+## Styling
 
-### Full-text Search
-```
-GET /posts?q=React
-```
+- CSS modules with dark/light theme support
+- CSS variables for consistent theming
+- Responsive design (mobile-first approach)
+- Smooth animations and transitions
+- Accessible color contrast
 
-### Multiple Filters
-```
-GET /comments?postId=1&parentCommentId=null
-```
+## Performance Optimizations
 
-### Nested Resources
-```
-GET /posts/1?_embed=comments
-GET /users/1?_embed=posts
-```
+1. **React Query**: Automatic caching and refetching
+2. **Lazy Loading**: Comments load only on demand
+3. **Infinite Scroll**: Posts load in batches (10 per page)
+4. **Suspense**: Smooth fallback for async components
+5. **Memoization**: Prevents unnecessary re-renders
 
-## Frontend Integration Notes
+## Browser Support
 
-### React Query Integration
-When using React Query with this backend:
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Mobile browsers
 
-```javascript
-// Fetching posts with React Query
-const { data: posts } = useQuery(['posts'], () => 
-  fetch('/api/posts').then(res => res.json())
-);
+## Troubleshooting
 
-// Mutating data
-const mutation = useMutation(newPost => 
-  fetch('/api/posts', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${token}` },
-    body: JSON.stringify(newPost)
-  })
-);
-```
+### Can't connect to backend?
+- Ensure JSON Server is running on port 3001
+- Check if `npm run server:dev` is active
 
-### Redux Toolkit Integration
-For Redux actions, dispatch API calls that interact with these endpoints:
+### Posts not loading?
+- Verify `db.json` file exists
+- Check browser console for API errors
+- Ensure you're logged in
 
-```javascript
-// Create async thunk for fetching posts
-export const fetchPosts = createAsyncThunk(
-  'posts/fetchPosts',
-  async () => {
-    const response = await fetch('/api/posts');
-    return response.json();
-  }
-);
-```
+### Theme not persisting?
+- Check if localStorage is enabled
+- Try clearing cache and logging in again
 
-### Context API for User/Theme
-Use Context to store the JWT token from login and pass it to API calls:
+## Future Enhancements
 
-```javascript
-// UserContext
-const UserContext = createContext();
-
-// Use token in API calls
-const token = useContext(UserContext).token;
-```
-
-## Performance Optimization
-
-### Lazy Load Comments
-```
-GET /posts/:id
-GET /comments?postId=:id (load separately)
-```
-
-### Pagination for Feed
-```
-GET /posts?_page=1&_limit=20
-```
-
-### Image Lazy Loading
-Avatar URLs can be lazy loaded using intersection observer in the frontend.
+- [ ] User profiles and follow system
+- [ ] Search and filtering
+- [ ] Post edit/delete by author
+- [ ] Nested comment threads
+- [ ] Notifications
+- [ ] User rankings/badges
+- [ ] Post categories
+- [ ] Real-time updates with WebSockets
 
 ## License
 
-MIT
+ISC
+
+## Support
+
+For issues or questions, check the API responses in browser DevTools (Network tab).
