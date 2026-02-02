@@ -52,7 +52,14 @@ function SignupPage() {
       navigate('/feed')
     },
     onError: (err) => {
-      setError(err.message || 'Signup failed. Please try again.')
+      // Parse error message from API
+      let errorMsg = 'Signup failed. Please try again.'
+      if (err.message.includes('Email already exists')) {
+        errorMsg = 'This email is already registered. Please use a different email or login.'
+      } else if (err.message) {
+        errorMsg = err.message
+      }
+      setError(errorMsg)
     },
   })
 
