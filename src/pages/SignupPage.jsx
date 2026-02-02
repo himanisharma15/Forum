@@ -20,45 +20,63 @@ function SignupPage() {
 
   const signupMutation = useMutation({
     mutationFn: async () => {
-      // json-server-auth only accepts email and password
-      const response = await usersAPI.signup({
-        email: formData.email,
-        password: formData.password,
-      })
-
-      // After signup, update the user record with additional fields
-      if (response.user && response.user.id) {
-        await usersAPI.updateUser(response.user.id, {
-          username: formData.username,
-          displayName: formData.displayName,
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.username}`,
-          theme: 'light',
+      try {
+        // json-server-auth only accepts email and password
+        const response = await usersAPI.signup({
+          email: formData.email,
+          password: formData.password,
         })
-      }
 
-      return {
-        ...response,
-        user: {
-          ...response.user,
-          username: formData.username,
-          displayName: formData.displayName,
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.username}`,
-          theme: 'light',
-        },
+        console.log('Signup response:', response)
+
+        // After signup, update the user record with additional fields
+        if (response.user && response.user.id) {
+          try {
+            await usersAPI.updateUser(response.user.id, {
+              username: formData.username,
+              displayName: formData.displayName,
+              avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.username}`,
+              theme: 'light',
+            })
+          } catch (updateErr) {
+            console.error('Failed to update user profile:', updateErr)
+            // Continue even if update fails - user is already created
+          }
+        }
+
+        return {
+          ...response,
+          user: {
+            ...response.user,
+            username: formData.username,
+            displayName: formData.displayName,
+            avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.username}`,
+            theme: 'light',
+          },
+        }
+      } catch (err) {
+        console.error('Signup error:', err)
+        throw err
       }
     },
     onSuccess: (data) => {
+      console.log('Signup successful, redirecting to feed')
       dispatch(setUser({ user: data.user, token: data.accessToken }))
       navigate('/feed')
     },
     onError: (err) => {
-      // Parse error message from API
+      console.error('Signup mutation error:', err)
       let errorMsg = 'Signup failed. Please try again.'
-      if (err.message.includes('Email already exists')) {
-        errorMsg = 'This email is already registered. Please use a different email or login.'
-      } else if (err.message) {
-        errorMsg = err.message
+      
+      // Check if error response has a message
+      if (err.message) {
+        if (err.message.includes('Email already exists')) {
+          errorMsg = 'This email is already registered. Please use a different email or login.'
+        } else {
+          errorMsg = err.message
+        }
       }
+      
       setError(errorMsg)
     },
   })

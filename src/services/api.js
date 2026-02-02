@@ -105,7 +105,13 @@ export const usersAPI = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     })
-    if (!response.ok) throw new Error('Login failed')
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      const errorMsg = errorData.message || errorData || 'Login failed'
+      throw new Error(errorMsg)
+    }
+    
     return response.json()
   },
 
@@ -115,7 +121,13 @@ export const usersAPI = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData),
     })
-    if (!response.ok) throw new Error('Signup failed')
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      const errorMsg = errorData.message || errorData || 'Signup failed'
+      throw new Error(errorMsg)
+    }
+    
     return response.json()
   },
 
