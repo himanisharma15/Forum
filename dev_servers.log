@@ -411,3 +411,30 @@ nohup: ignoring input
 [1] [0mGET /posts?_page=1&_limit=10&_sort=-createdAt [36m304[0m 24.080 ms - -[0m
 [0] 10:35:26 PM [vite] hmr update /src/components/PostCard.jsx
 [0] 10:35:26 PM [vite] hmr update /src/components/CommentSection.jsx
+[1] [0mGET /posts/4 [36m304[0m 8.396 ms - -[0m
+[1] [32m[nodemon] restarting child process[39m
+[1] [32m[nodemon] starting `npm run server`[39m
+[0] npm run dev exited with code SIGHUP
+[1] 
+[1] > forum-app@1.0.0 server
+[1] > json-server-auth --watch db.json --port 3001
+[1] 
+[1] 
+[1]   \{^_^}/ hi!
+[1] 
+[1]   Loading db.json
+[1]   Loading /home/navgurukul/Downloads/forum1/node_modules/json-server-auth/dist
+[1]   Done
+[1] 
+[1]   Resources
+[1]   http://localhost:3001/users
+[1]   http://localhost:3001/posts
+[1]   http://localhost:3001/comments
+[1]   http://localhost:3001/likes
+[1] 
+[1]   Home
+[1]   http://localhost:3001
+[1] 
+[1]   Type s + enter at any time to create a snapshot of the database
+[1]   Watching...
+[1] 
