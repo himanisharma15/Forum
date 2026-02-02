@@ -20,14 +20,32 @@ function SignupPage() {
 
   const signupMutation = useMutation({
     mutationFn: async () => {
-      return usersAPI.signup({
+      // json-server-auth only accepts email and password
+      const response = await usersAPI.signup({
         email: formData.email,
         password: formData.password,
-        username: formData.username,
-        displayName: formData.displayName,
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.username}`,
-        theme: 'light',
       })
+
+      // After signup, update the user record with additional fields
+      if (response.user && response.user.id) {
+        await usersAPI.updateUser(response.user.id, {
+          username: formData.username,
+          displayName: formData.displayName,
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.username}`,
+          theme: 'light',
+        })
+      }
+
+      return {
+        ...response,
+        user: {
+          ...response.user,
+          username: formData.username,
+          displayName: formData.displayName,
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.username}`,
+          theme: 'light',
+        },
+      }
     },
     onSuccess: (data) => {
       dispatch(setUser({ user: data.user, token: data.accessToken }))
